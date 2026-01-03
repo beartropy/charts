@@ -22,11 +22,11 @@
 
         <div class="flex-1 flex flex-col space-y-2 relative">
             <!-- Chart Area -->
-            <div class="relative {{ $height }} w-full border-b border-gray-200 dark:border-white/10 pb-2">
+            <div class="relative {{ $height }} w-full border-b border-gray-200 dark:border-white/10 pb-2 px-4">
                 
                 <!-- Grid Lines -->
                 @if ($showGrid)
-                    <div class="absolute inset-x-0 bottom-2 top-0 flex flex-col justify-between pointer-events-none z-0">
+                    <div class="absolute inset-x-4 bottom-2 top-0 flex flex-col justify-between pointer-events-none z-0">
                         <div class="border-t border-gray-200 dark:border-gray-700 w-full h-0"></div>
                         <div class="border-t border-gray-200 dark:border-gray-700 w-full h-0"></div>
                         <div class="border-t border-gray-200 dark:border-gray-700 w-full h-0"></div>
@@ -36,7 +36,7 @@
                 @endif
 
                 <!-- SVG Lines -->
-                <div class="absolute inset-x-0 bottom-2 top-0 z-10 pointer-events-none">
+                <div class="absolute inset-x-4 bottom-2 top-0 z-10 pointer-events-none">
                     <svg class="w-full h-full text-transparent" viewBox="0 0 100 100" preserveAspectRatio="none">
                         @foreach($datasets as $dataset)
                             <polyline 
@@ -53,7 +53,7 @@
                 
                 <!-- Points and Labels Overlay -->
                 @if($showPoints)
-                    <div class="absolute inset-x-0 bottom-2 top-0 z-20 pointer-events-none">
+                    <div class="absolute inset-x-4 bottom-2 top-0 z-20 pointer-events-none">
                         @foreach($datasets as $dataset)
                             @foreach($dataset['dataPoints'] as $point)
                                 <div 
