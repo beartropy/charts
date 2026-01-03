@@ -9,6 +9,8 @@ class LineChart extends Component
     public array $data = [];
     public ?float $max = null;
     public string $height = 'h-64';
+    public mixed $chartColor = null;
+    public ?string $backgroundColor = null;
     public ?string $title = null;
     public bool $showGrid = true;
     public bool $showYAxis = true;
@@ -20,11 +22,15 @@ class LineChart extends Component
     public string $dataLabels = 'hover';
     public ?string $xAxisTitle = null;
     public ?string $yAxisTitle = null;
+    public bool $border = true;
+    public ?string $borderColor = null;
 
     public function __construct(
         array $data = [],
         ?float $max = null,
         string $height = 'h-64',
+        mixed $chartColor = null,
+        ?string $backgroundColor = null,
         ?string $title = null,
         bool $showGrid = true,
         bool $showYAxis = true,
@@ -34,11 +40,15 @@ class LineChart extends Component
         bool $showPoints = true,
         string $dataLabels = 'hover',
         ?string $xAxisTitle = null,
-        ?string $yAxisTitle = null
+        ?string $yAxisTitle = null,
+        bool $border = true,
+        ?string $borderColor = null
     ) {
         $this->data = $data;
         $this->max = $max;
         $this->height = $height;
+        $this->chartColor = $chartColor;
+        $this->backgroundColor = $backgroundColor;
         $this->title = $title;
         $this->showGrid = $showGrid;
         $this->showYAxis = $showYAxis;
@@ -49,6 +59,8 @@ class LineChart extends Component
         $this->dataLabels = $dataLabels;
         $this->xAxisTitle = $xAxisTitle;
         $this->yAxisTitle = $yAxisTitle;
+        $this->border = $border;
+        $this->borderColor = $borderColor;
     }
 
     public function render()
@@ -100,6 +112,8 @@ class LineChart extends Component
                     'value' => $val,
                     'formatted_value' => sprintf($this->formatValues, $val),
                     'color' => $dataset['color'],
+                    'color_is_css' => $dataset['color_is_css'] ?? false,
+                    'color_is_tailwind_class' => $dataset['color_is_tailwind_class'] ?? false,
                     // Attach label if available for this index
                     'label' => $xAxisLabels[$index] ?? '', 
                     'label_position' => 'top', // Default position
@@ -115,6 +129,9 @@ class LineChart extends Component
             'datasets' => $datasets,
             'yAxisTicks' => $yAxisTicks,
             'xAxisLabels' => $xAxisLabels,
+            'backgroundColor' => $this->backgroundColor,
+            'border' => $this->border,
+            'borderColor' => $this->borderColor,
         ]);
     }
 
@@ -230,6 +247,15 @@ class LineChart extends Component
             'pink',
         ];
 
+        if ($this->chartColor) {
+             if (is_array($this->chartColor)) {
+                 $palette = $this->chartColor;
+             } else {
+                 $palette = [$this->chartColor];
+             }
+        }
+
+
         $normalized = [];
         
         // Detect if multidimensional (multiple datasets) or simple array
@@ -249,13 +275,18 @@ class LineChart extends Component
             $normalized[] = [
                 'label' => 'Dataset 1',
                 'color' => $palette[0],
+                'color_is_css' => $this->isCssColor($palette[0]),
+                'color_is_tailwind_class' => $this->isTailwindClass($palette[0]),
                 'values' => $this->extractValues($this->data),
             ];
         } else {
             foreach ($this->data as $index => $series) {
+                $color = $series['color'] ?? $palette[$index % count($palette)];
                 $normalized[] = [
                     'label' => $series['label'] ?? "Series " . ($index + 1),
-                    'color' => $series['color'] ?? $palette[$index % count($palette)],
+                    'color' => $color,
+                    'color_is_css' => $this->isCssColor($color),
+                    'color_is_tailwind_class' => $this->isTailwindClass($color),
                     'values' => $this->extractValues($series['data'] ?? $series['values'] ?? []),
                 ];
             }
@@ -275,5 +306,22 @@ class LineChart extends Component
             }
         }
         return $values;
+    }
+
+    protected function isCssColor(string $color): bool
+    {
+        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
+    }
+
+    protected function isTailwindClass(string $color): bool
+    {
+        // If it contains spaces or starts with common Tailwind prefixes, it's a full class string
+        return str_contains($color, ' ') || 
+               str_starts_with($color, 'bg-') || 
+               str_starts_with($color, 'text-') ||
+               str_starts_with($color, 'border-') ||
+               str_starts_with($color, 'from-') ||
+               str_starts_with($color, 'to-') ||
+               str_starts_with($color, 'via-');
     }
 }

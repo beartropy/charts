@@ -7,32 +7,44 @@ use Illuminate\View\Component;
 class PieChart extends Component
 {
     public array $data = [];
-    public string $height = 'h-64';
+     public string $height = 'h-64';
+    public mixed $chartColor = null;
+    public ?string $backgroundColor = null;
     public ?string $title = null;
     public bool $showLabels = true;
     public string $legendPosition = 'right';
     public string $formatValues = '%s';
     public string $label = 'label';
     public string $value = 'value';
+    public bool $border = true;
+    public ?string $borderColor = null;
 
     public function __construct(
         array $data = [],
         string $height = 'h-64',
+        mixed $chartColor = null,
+        ?string $backgroundColor = null,
         ?string $title = null,
         bool $showLabels = true,
         string $legendPosition = 'right',
         string $formatValues = '%s',
         string $label = 'label',
-        string $value = 'value'
+        string $value = 'value',
+        bool $border = true,
+        ?string $borderColor = null
     ) {
         $this->data = $data;
         $this->height = $height;
+        $this->chartColor = $chartColor;
+        $this->backgroundColor = $backgroundColor;
         $this->title = $title;
         $this->showLabels = $showLabels;
         $this->legendPosition = $legendPosition;
         $this->formatValues = $formatValues;
         $this->label = $label;
         $this->value = $value;
+        $this->border = $border;
+        $this->borderColor = $borderColor;
     }
 
     public function render()
@@ -41,6 +53,9 @@ class PieChart extends Component
 
         return view('beartropy-charts::pie-chart', [
             'slices' => $slices,
+            'backgroundColor' => $this->backgroundColor,
+            'border' => $this->border,
+            'borderColor' => $this->borderColor,
         ]);
     }
 
@@ -119,6 +134,8 @@ class PieChart extends Component
                 'value' => $val,
                 'label' => $item['label'],
                 'color' => $item['color'],
+                'color_is_css' => $item['color_is_css'],
+                'color_is_tailwind_class' => $item['color_is_tailwind_class'],
                 'percent' => round($percentage * 100, 1),
                 'formatted_value' => sprintf($this->formatValues, $val),
                 'path' => $d,
@@ -141,6 +158,15 @@ class PieChart extends Component
             'stone', 'green', 'pink',
         ];
 
+        if ($this->chartColor) {
+             if (is_array($this->chartColor)) {
+                 $palette = $this->chartColor;
+             } else {
+                 $palette = [$this->chartColor];
+             }
+        }
+
+
         $items = [];
         $index = 0;
 
@@ -148,21 +174,43 @@ class PieChart extends Component
             $autoColor = $palette[$index % count($palette)];
 
             if (is_array($value)) {
+                $color = $value['color'] ?? $autoColor;
                 $items[] = [
                     'value' => $value[$this->value] ?? 0,
                     'label' => $value[$this->label] ?? (string)$key,
-                    'color' => $value['color'] ?? $autoColor,
+                    'color' => $color,
+                    'color_is_css' => $this->isCssColor($color),
+                    'color_is_tailwind_class' => $this->isTailwindClass($color),
                 ];
             } else {
                 $items[] = [
                     'value' => $value,
                     'label' => (string)$key,
                     'color' => $autoColor,
+                    'color_is_css' => $this->isCssColor($autoColor),
+                    'color_is_tailwind_class' => $this->isTailwindClass($autoColor),
                 ];
             }
             $index++;
         }
 
         return $items;
+    }
+
+    protected function isCssColor(string $color): bool
+    {
+        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
+    }
+
+    protected function isTailwindClass(string $color): bool
+    {
+        // If it contains spaces or starts with common Tailwind prefixes, it's a full class string
+        return str_contains($color, ' ') || 
+               str_starts_with($color, 'bg-') || 
+               str_starts_with($color, 'text-') ||
+               str_starts_with($color, 'border-') ||
+               str_starts_with($color, 'from-') ||
+               str_starts_with($color, 'to-') ||
+               str_starts_with($color, 'via-');
     }
 }

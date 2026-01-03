@@ -1,4 +1,20 @@
-<div {{ $attributes->merge(['class' => 'flex flex-col']) }}>
+@php
+    $bgColorIsCss = $backgroundColor && (str_starts_with($backgroundColor, '#') || str_starts_with($backgroundColor, 'rgb') || str_starts_with($backgroundColor, 'hsl'));
+    $bgColorIsTailwindClass = $backgroundColor && (str_contains($backgroundColor, ' ') || str_starts_with($backgroundColor, 'bg-'));
+    
+    $borderColorIsCss = $borderColor && (str_starts_with($borderColor, '#') || str_starts_with($borderColor, 'rgb') || str_starts_with($borderColor, 'hsl'));
+    $borderColorIsTailwindClass = $borderColor && (str_contains($borderColor, ' ') || str_starts_with($borderColor, 'border-'));
+    $defaultBorderColor = 'border-gray-200 dark:border-gray-700';
+@endphp
+<div {{ $attributes->merge(['class' => 'flex flex-col p-4' . 
+    ($bgColorIsTailwindClass ? ' ' . $backgroundColor : (!$bgColorIsCss && $backgroundColor ? ' bg-' . $backgroundColor : '')) .
+    ($border ? ' border rounded-lg' : '') .
+    ($border ? ($borderColorIsTailwindClass ? ' ' . $borderColor : (!$borderColorIsCss && $borderColor ? ' border-' . $borderColor : ' ' . $defaultBorderColor)) : '')
+]) }}
+     @if($bgColorIsCss) style="background-color: {{ $backgroundColor }}; {{ $border && $borderColorIsCss ? 'border-color: ' . $borderColor . ';' : '' }}" 
+     @elseif($border && $borderColorIsCss) style="border-color: {{ $borderColor }};" 
+     @endif>
+
     
     @if($title)
         <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-5">{{ $title }}</h3>
@@ -44,8 +60,8 @@
                     @endif
 
                     <!-- Bar -->
-                    <div style="height: {{ $item['percentage'] }}%"
-                        class="w-full {{ $roundedClass }} bg-{{ $item['color'] }}-500 transition-all duration-500 ease-out">
+                    <div style="height: {{ $item['percentage'] }}%; {{ $item['color_is_css'] ? 'background-color: ' . $item['color'] . ';' : '' }}"
+                        class="w-full {{ $roundedClass }} {{ $item['color_is_tailwind_class'] ? $item['color'] : (!$item['color_is_css'] ? 'bg-' . $item['color'] . '-500' : '') }} transition-all duration-500 ease-out">
                     </div>
                 </div>
             @endforeach

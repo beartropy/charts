@@ -10,6 +10,8 @@ class BarChart extends Component
     public string $height = 'h-64';
     public bool $showValues = true;
     public string $color = 'beartropy';
+    public mixed $chartColor = null;
+    public ?string $backgroundColor = null;
     public string $gap = 'sm';
     public mixed $rounded = true;
     public bool $showGrid = false;
@@ -18,6 +20,8 @@ class BarChart extends Component
     public string $label = 'label';
     public string $value = 'value';
     public ?string $title = null;
+    public bool $border = true;
+    public ?string $borderColor = null;
 
     public function __construct(
         array $data = [],
@@ -25,6 +29,8 @@ class BarChart extends Component
         string $height = 'h-64',
         bool $showValues = true,
         string $color = 'beartropy',
+        mixed $chartColor = null,
+        ?string $backgroundColor = null,
         string $gap = 'sm',
         mixed $rounded = true,
         bool $showGrid = false,
@@ -32,13 +38,17 @@ class BarChart extends Component
         string $formatValues = '%s',
         string $label = 'label',
         string $value = 'value',
-        ?string $title = null
+        ?string $title = null,
+        bool $border = true,
+        ?string $borderColor = null
     ) {
         $this->data = $data;
         $this->max = $max;
         $this->height = $height;
         $this->showValues = $showValues;
         $this->color = $color;
+        $this->chartColor = $chartColor;
+        $this->backgroundColor = $backgroundColor;
         $this->gap = $gap;
         $this->rounded = $rounded;
         $this->showGrid = $showGrid;
@@ -47,6 +57,8 @@ class BarChart extends Component
         $this->label = $label;
         $this->value = $value;
         $this->title = $title;
+        $this->border = $border;
+        $this->borderColor = $borderColor;
     }
 
     public function render()
@@ -85,6 +97,9 @@ class BarChart extends Component
             'gapClass' => $gapClass,
             'roundedClass' => $roundedClass,
             'yAxisTicks' => $yAxisTicks,
+            'backgroundColor' => $this->backgroundColor,
+            'border' => $this->border,
+            'borderColor' => $this->borderColor,
         ]);
     }
 
@@ -120,6 +135,15 @@ class BarChart extends Component
             'pink',
         ];
 
+        if ($this->chartColor) {
+             if (is_array($this->chartColor)) {
+                 $palette = $this->chartColor;
+             } else {
+                 $palette = [$this->chartColor];
+             }
+        }
+
+
         // Normalize data structure
         // Supports: [10, 20, 30] or [['label' => 'A', 'value' => 10], ...]
         $items = [];
@@ -141,6 +165,10 @@ class BarChart extends Component
                 $item['label'] = (string)$key;
                 $item['color'] = $autoColor;
             }
+            
+            $item['color_is_css'] = $this->isCssColor($item['color']);
+            $item['color_is_tailwind_class'] = $this->isTailwindClass($item['color']);
+
             $items[] = $item;
             $maxValue = max($maxValue, $item['value']);
             $index++;
@@ -154,5 +182,22 @@ class BarChart extends Component
         }
 
         return $items;
+    }
+
+    protected function isCssColor(string $color): bool
+    {
+        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
+    }
+
+    protected function isTailwindClass(string $color): bool
+    {
+        // If it contains spaces or starts with common Tailwind prefixes, it's a full class string
+        return str_contains($color, ' ') || 
+               str_starts_with($color, 'bg-') || 
+               str_starts_with($color, 'text-') ||
+               str_starts_with($color, 'border-') ||
+               str_starts_with($color, 'from-') ||
+               str_starts_with($color, 'to-') ||
+               str_starts_with($color, 'via-');
     }
 }

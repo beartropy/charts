@@ -1,4 +1,20 @@
-<div {{ $attributes->merge(['class' => 'flex flex-col']) }}>
+@php
+    $bgColorIsCss = $backgroundColor && (str_starts_with($backgroundColor, '#') || str_starts_with($backgroundColor, 'rgb') || str_starts_with($backgroundColor, 'hsl'));
+    $bgColorIsTailwindClass = $backgroundColor && (str_contains($backgroundColor, ' ') || str_starts_with($backgroundColor, 'bg-'));
+    
+    $borderColorIsCss = $borderColor && (str_starts_with($borderColor, '#') || str_starts_with($borderColor, 'rgb') || str_starts_with($borderColor, 'hsl'));
+    $borderColorIsTailwindClass = $borderColor && (str_contains($borderColor, ' ') || str_starts_with($borderColor, 'border-'));
+    $defaultBorderColor = 'border-gray-200 dark:border-gray-700';
+@endphp
+<div {{ $attributes->merge(['class' => 'flex flex-col p-4' . 
+    ($bgColorIsTailwindClass ? ' ' . $backgroundColor : (!$bgColorIsCss && $backgroundColor ? ' bg-' . $backgroundColor : '')) .
+    ($border ? ' border rounded-lg' : '') .
+    ($border ? ($borderColorIsTailwindClass ? ' ' . $borderColor : (!$borderColorIsCss && $borderColor ? ' border-' . $borderColor : ' ' . $defaultBorderColor)) : '')
+]) }}
+     @if($bgColorIsCss) style="background-color: {{ $backgroundColor }}; {{ $border && $borderColorIsCss ? 'border-color: ' . $borderColor . ';' : '' }}" 
+     @elseif($border && $borderColorIsCss) style="border-color: {{ $borderColor }};" 
+     @endif>
+
     
     @if($title)
         <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-5">{{ $title }}</h3>
@@ -41,10 +57,10 @@
                             <polyline 
                                 points="{{ $dataset['points'] }}" 
                                 fill="none" 
-                                stroke="currentColor"
+                                stroke="{{ $dataset['color_is_css'] ? $dataset['color'] : 'currentColor' }}"
                                 stroke-width="2" 
                                 vector-effect="non-scaling-stroke"
-                                class="text-{{ $dataset['color'] }}-500 transition-all duration-500 ease-out"
+                                class="{{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : (!$dataset['color_is_css'] ? 'text-' . $dataset['color'] . '-500' : '') }} transition-all duration-500 ease-out"
                             />
                         @endforeach
                     </svg>
@@ -60,7 +76,9 @@
                                     style="left: {{ $point['x'] }}%; top: {{ $point['y'] }}%; transform: translate(-50%, -50%);"
                                 >
                                     <!-- Dot -->
-                                    <div class="w-2 h-2 rounded-full bg-{{ $point['color'] }}-500 border border-white dark:border-gray-800 shadow-sm pointer-events-auto hover:scale-125 transition-transform"></div>
+                                    <div class="w-2 h-2 rounded-full {{ $point['color_is_tailwind_class'] ? $point['color'] : (!$point['color_is_css'] ? 'bg-' . $point['color'] . '-500' : '') }} border border-white dark:border-gray-800 shadow-sm pointer-events-auto hover:scale-125 transition-transform"
+                                         style="{{ $point['color_is_css'] ? 'background-color: ' . $point['color'] . ';' : '' }}"
+                                    ></div>
                                     
                                     <!-- Label -->
                                     @if($dataLabels !== 'none')
