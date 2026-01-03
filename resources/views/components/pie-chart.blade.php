@@ -33,7 +33,7 @@
                             y="{{ $slice['label_y'] }}" 
                             text-anchor="middle" 
                             dominant-baseline="middle" 
-                            class="fill-white text-[3px] font-bold pointer-events-none select-none"
+                            class="fill-{{ $labelColor }} text-[5px] font-bold pointer-events-none select-none"
                             style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
                         >
                             {{ $slice['percent'] }}%

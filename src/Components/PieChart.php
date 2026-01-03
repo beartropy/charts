@@ -16,6 +16,7 @@ class PieChart extends Component
     public string $formatValues = '%s';
     public string $label = 'label';
     public string $value = 'value';
+    public string $labelColor = 'white';
 
     public function __construct(
         array $data = [],
@@ -29,7 +30,8 @@ class PieChart extends Component
         string $label = 'label',
         string $value = 'value',
         bool $border = true,
-        ?string $borderColor = null
+        ?string $borderColor = null,
+        string $labelColor = 'white'
     ) {
         $this->data = $data;
         $this->height = $height;
@@ -38,6 +40,7 @@ class PieChart extends Component
         $this->formatValues = $formatValues;
         $this->label = $label;
         $this->value = $value;
+        $this->labelColor = $labelColor;
         
         $this->initializeChartStyling($title, $border, $borderColor, $backgroundColor, $chartColor);
     }

@@ -37,7 +37,7 @@
                         <!-- Value Tooltip/Label -->
                         @if ($showValues)
                             <span
-                                class="absolute -top-6 text-xs text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
+                                class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs text-gray-500 dark:text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20">
                                 {{ $item['formatted_value'] }}
                             </span>
                         @endif
