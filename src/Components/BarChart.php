@@ -13,6 +13,7 @@ class BarChart extends Component
     public ?float $max = null;
     public string $height = 'h-64';
     public bool $showValues = true;
+    public bool $showValuesAlways = false;
     public string $color = 'beartropy';
     public string $gap = 'sm';
     public mixed $rounded = true;
@@ -27,6 +28,7 @@ class BarChart extends Component
         ?float $max = null,
         string $height = 'h-64',
         bool $showValues = true,
+        bool $showValuesAlways = false,
         string $color = 'beartropy',
         mixed $chartColor = null,
         ?string $backgroundColor = null,
@@ -45,6 +47,7 @@ class BarChart extends Component
         $this->max = $max;
         $this->height = $height;
         $this->showValues = $showValues;
+        $this->showValuesAlways = $showValuesAlways;
         $this->color = $color;
         $this->gap = $gap;
         $this->rounded = $rounded;

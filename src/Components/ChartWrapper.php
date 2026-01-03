@@ -11,6 +11,7 @@ class ChartWrapper extends Component
         public bool $border = true,
         public ?string $borderColor = null,
         public ?string $backgroundColor = null,
+        public bool $collapsible = false,
     ) {}
 
     public function render()

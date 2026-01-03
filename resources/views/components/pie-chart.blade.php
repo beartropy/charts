@@ -13,34 +13,38 @@
         <!-- Chart Area -->
         <div class="relative {{ $height }} w-auto flex-shrink-0 flex justify-center items-center">
              <svg class="h-full w-auto" viewBox="0 0 100 100">
-                @foreach($slices as $slice)
-                    <path 
-                        d="{{ $slice['path'] }}" 
-                        fill="{{ $slice['color_is_css'] ? $slice['color'] : 'currentColor' }}"
-                        class="{{ $slice['color_is_tailwind_class'] ? $slice['color'] . ' hover:opacity-80' : (!$slice['color_is_css'] ? 'text-' . $slice['color'] . '-500 hover:text-' . $slice['color'] . '-400' : 'hover:opacity-80') }} transition-colors duration-200 cursor-pointer stroke-white dark:stroke-gray-800"
-                        stroke-width="0.5"
-                    >
-                        <title>{{ $slice['label'] }}: {{ $slice['formatted_value'] }} ({{ $slice['percent'] }}%)</title>
-                    </path>
-                @endforeach
+                <!-- Shadow filter definition -->
+                <defs>
+                    <filter id="pie-slice-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                    </filter>
+                </defs>
                 
-                @if($showLabels)
-                    <!-- Labels on chart slices -->
-                    @foreach($slices as $slice)
-                        @if($slice['percent'] > 5) <!-- Only show if slice is big enough -->
-                        <text 
-                            x="{{ $slice['label_x'] }}" 
-                            y="{{ $slice['label_y'] }}" 
-                            text-anchor="middle" 
-                            dominant-baseline="middle" 
-                            class="fill-{{ $labelColor }} text-[5px] font-bold pointer-events-none select-none"
-                            style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
+                @foreach($slices as $slice)
+                    <g class="pie-slice-group">
+                        <path 
+                            d="{{ $slice['path'] }}" 
+                            fill="{{ $slice['color_is_css'] ? $slice['color'] : 'currentColor' }}"
+                            class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] . ' hover:opacity-80' : (!$slice['color_is_css'] ? 'text-' . $slice['color'] . '-500 hover:text-' . $slice['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            stroke-width="0.1"
                         >
-                            {{ $slice['percent'] }}%
-                        </text>
+                            <title>{{ $slice['label'] }}: {{ $slice['formatted_value'] }} ({{ $slice['percent'] }}%)</title>
+                        </path>
+                        
+                        @if($showLabels && $slice['percent'] > 5)
+                            <text 
+                                x="{{ $slice['label_x'] }}" 
+                                y="{{ $slice['label_y'] }}" 
+                                text-anchor="middle" 
+                                dominant-baseline="middle" 
+                                class="pie-label fill-{{ $labelColor }} text-[4.5px] font-semibold pointer-events-none select-none transition-all duration-200"
+                                style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
+                            >
+                                {{ $slice['percent'] }}%
+                            </text>
                         @endif
-                    @endforeach
-                @endif
+                    </g>
+                @endforeach
              </svg>
         </div>
 
@@ -68,4 +72,16 @@
             </div>
         @endif
     </div>
+    
+    <style>
+        .pie-slice {
+            filter: none;
+        }
+        .pie-slice:hover {
+            filter: url(#pie-slice-shadow);
+        }
+        .pie-slice-group:hover .pie-label {
+            font-size: 5.5px;
+        }
+    </style>
 </x-beartropy-charts::chart-wrapper>

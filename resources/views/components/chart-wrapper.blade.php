@@ -3,6 +3,7 @@
     'border' => true,
     'borderColor' => null,
     'backgroundColor' => null,
+    'collapsible' => false,
 ])
 
 @php
@@ -21,15 +22,47 @@
 ]) }}
      @if($bgColorIsCss) style="background-color: {{ $backgroundColor }}; {{ $border && $borderColorIsCss ? 'border-color: ' . $borderColor . ';' : '' }}" 
      @elseif($border && $borderColorIsCss) style="border-color: {{ $borderColor }};" 
-     @endif>
+     @endif
+     @if($collapsible && ($title || isset($title))) x-data="{ collapsed: false }" @endif>
 
     @if(isset($title) && $title instanceof \Illuminate\View\ComponentSlot)
-        {{ $title }}
+        @if($collapsible)
+            <div @click="collapsed = !collapsed" class="cursor-pointer select-none">
+                <div class="flex items-center justify-between">
+                    {{ $title }}
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200" 
+                         :class="{ 'rotate-180': collapsed }"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+        @else
+            {{ $title }}
+        @endif
     @elseif($title)
-        <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ $title }}</h3>
+        @if($collapsible)
+            <div @click="collapsed = !collapsed" class="flex items-center justify-between cursor-pointer select-none" :class="{ 'mb-3': !collapsed }">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">{{ $title }}</h3>
+                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200" 
+                     :class="{ 'rotate-180': collapsed }"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        @else
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ $title }}</h3>
+        @endif
     @endif
 
-    <div class="mt-5">
+    <div @if($collapsible && ($title || isset($title))) 
+            :class="{ 'mt-5': !collapsed }"
+            x-show="!collapsed"
+            x-collapse
+         @else
+            class="mt-5"
+         @endif
+         class="transition-all duration-300">
         {{ $slot }}
     </div>
 </div>
