@@ -17,7 +17,8 @@ class ChartsServiceProvider extends ServiceProvider
         $components = [
             'LineChart',
             'BarChart',
-            'PieChart'
+            'PieChart',
+            'ChartWrapper',
         ];
 
         foreach ($components as $component) {
