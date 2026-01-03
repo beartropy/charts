@@ -2,22 +2,20 @@
 
 namespace Beartropy\Charts\Components;
 
+use Beartropy\Charts\Concerns\HasChartStyling;
 use Illuminate\View\Component;
 
 class PieChart extends Component
 {
+    use HasChartStyling;
+
     public array $data = [];
-     public string $height = 'h-64';
-    public mixed $chartColor = null;
-    public ?string $backgroundColor = null;
-    public ?string $title = null;
+    public string $height = 'h-64';
     public bool $showLabels = true;
     public string $legendPosition = 'right';
     public string $formatValues = '%s';
     public string $label = 'label';
     public string $value = 'value';
-    public bool $border = true;
-    public ?string $borderColor = null;
 
     public function __construct(
         array $data = [],
@@ -35,28 +33,22 @@ class PieChart extends Component
     ) {
         $this->data = $data;
         $this->height = $height;
-        $this->chartColor = $chartColor;
-        $this->backgroundColor = $backgroundColor;
-        $this->title = $title;
         $this->showLabels = $showLabels;
         $this->legendPosition = $legendPosition;
         $this->formatValues = $formatValues;
         $this->label = $label;
         $this->value = $value;
-        $this->border = $border;
-        $this->borderColor = $borderColor;
+        
+        $this->initializeChartStyling($title, $border, $borderColor, $backgroundColor, $chartColor);
     }
 
     public function render()
     {
         $slices = $this->prepareSlices();
 
-        return view('beartropy-charts::pie-chart', [
+        return view('beartropy-charts::pie-chart', array_merge([
             'slices' => $slices,
-            'backgroundColor' => $this->backgroundColor,
-            'border' => $this->border,
-            'borderColor' => $this->borderColor,
-        ]);
+        ], $this->getStylingVariables()));
     }
 
     protected function prepareSlices(): array

@@ -15,13 +15,14 @@
      @elseif($border && $borderColorIsCss) style="border-color: {{ $borderColor }};" 
      @endif>
 
-    
-    @if($title)
+    @if(isset($title) && $title instanceof \Illuminate\View\ComponentSlot)
+        {{ $title }}
+    @elseif($title)
         <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-5">{{ $title }}</h3>
     @endif
 
     <div @class([
-        'flex items-center w-full mt-2 gap-6',
+        'flex items-center w-full gap-6',
         'flex-col' => $legendPosition === 'bottom',
         'flex-row' => $legendPosition === 'right',
     ])>
@@ -48,7 +49,7 @@
                             y="{{ $slice['label_y'] }}" 
                             text-anchor="middle" 
                             dominant-baseline="middle" 
-                            class="fill-white text-[4px] font-bold pointer-events-none select-none"
+                            class="fill-white text-[3px] font-bold pointer-events-none select-none"
                             style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
                         >
                             {{ $slice['percent'] }}%
@@ -62,7 +63,7 @@
         <!-- Legend -->
         @if($legendPosition !== 'none' && $legendPosition !== 'hidden')
             <div @class([
-                'flex gap-4 text-sm overflow-y-auto max-h-64 pr-2',
+                'flex gap-4 text-xs overflow-y-auto max-h-64 pr-2',
                 'flex-col w-64' => $legendPosition === 'right',
                 'flex-row flex-wrap justify-center w-full' => $legendPosition === 'bottom',
             ])>

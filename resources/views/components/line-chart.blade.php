@@ -15,12 +15,13 @@
      @elseif($border && $borderColorIsCss) style="border-color: {{ $borderColor }};" 
      @endif>
 
-    
-    @if($title)
+    @if(isset($title) && $title instanceof \Illuminate\View\ComponentSlot)
+        {{ $title }}
+    @elseif($title)
         <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-5">{{ $title }}</h3>
     @endif
 
-    <div class="flex w-full mt-2">
+    <div class="flex w-full">
         <!-- Y-Axis -->
         <div class="flex flex-col items-end pr-2 gap-1">
              @if($yAxisTitle)

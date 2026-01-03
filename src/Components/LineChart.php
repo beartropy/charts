@@ -2,28 +2,25 @@
 
 namespace Beartropy\Charts\Components;
 
+use Beartropy\Charts\Concerns\HasChartStyling;
 use Illuminate\View\Component;
 
 class LineChart extends Component
 {
+    use HasChartStyling;
+
     public array $data = [];
     public ?float $max = null;
     public string $height = 'h-64';
-    public mixed $chartColor = null;
-    public ?string $backgroundColor = null;
-    public ?string $title = null;
     public bool $showGrid = true;
     public bool $showYAxis = true;
     public string $formatValues = '%s';
     public string $label = 'label';
     public string $value = 'value';
-
     public bool $showPoints = true;
     public string $dataLabels = 'hover';
     public ?string $xAxisTitle = null;
     public ?string $yAxisTitle = null;
-    public bool $border = true;
-    public ?string $borderColor = null;
 
     public function __construct(
         array $data = [],
@@ -47,9 +44,6 @@ class LineChart extends Component
         $this->data = $data;
         $this->max = $max;
         $this->height = $height;
-        $this->chartColor = $chartColor;
-        $this->backgroundColor = $backgroundColor;
-        $this->title = $title;
         $this->showGrid = $showGrid;
         $this->showYAxis = $showYAxis;
         $this->formatValues = $formatValues;
@@ -59,8 +53,8 @@ class LineChart extends Component
         $this->dataLabels = $dataLabels;
         $this->xAxisTitle = $xAxisTitle;
         $this->yAxisTitle = $yAxisTitle;
-        $this->border = $border;
-        $this->borderColor = $borderColor;
+        
+        $this->initializeChartStyling($title, $border, $borderColor, $backgroundColor, $chartColor);
     }
 
     public function render()
@@ -125,14 +119,11 @@ class LineChart extends Component
 
         $this->resolveLabelOverlaps($datasets);
 
-        return view('beartropy-charts::line-chart', [
+        return view('beartropy-charts::line-chart', array_merge([
             'datasets' => $datasets,
             'yAxisTicks' => $yAxisTicks,
             'xAxisLabels' => $xAxisLabels,
-            'backgroundColor' => $this->backgroundColor,
-            'border' => $this->border,
-            'borderColor' => $this->borderColor,
-        ]);
+        ], $this->getStylingVariables()));
     }
 
     protected function resolveLabelOverlaps(array &$datasets): void
@@ -247,15 +238,7 @@ class LineChart extends Component
             'pink',
         ];
 
-        if ($this->chartColor) {
-             if (is_array($this->chartColor)) {
-                 $palette = $this->chartColor;
-             } else {
-                 $palette = [$this->chartColor];
-             }
-        }
-
-
+        $palette = $this->getColorPalette();
         $normalized = [];
         
         // Detect if multidimensional (multiple datasets) or simple array

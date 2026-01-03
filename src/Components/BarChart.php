@@ -1,17 +1,19 @@
 <?php
 
 namespace Beartropy\Charts\Components;
+
+use Beartropy\Charts\Concerns\HasChartStyling;
 use Illuminate\View\Component;
 
 class BarChart extends Component
 {
+    use HasChartStyling;
+
     public array $data = [];
     public ?float $max = null;
     public string $height = 'h-64';
     public bool $showValues = true;
     public string $color = 'beartropy';
-    public mixed $chartColor = null;
-    public ?string $backgroundColor = null;
     public string $gap = 'sm';
     public mixed $rounded = true;
     public bool $showGrid = false;
@@ -19,9 +21,6 @@ class BarChart extends Component
     public string $formatValues = '%s';
     public string $label = 'label';
     public string $value = 'value';
-    public ?string $title = null;
-    public bool $border = true;
-    public ?string $borderColor = null;
 
     public function __construct(
         array $data = [],
@@ -47,8 +46,6 @@ class BarChart extends Component
         $this->height = $height;
         $this->showValues = $showValues;
         $this->color = $color;
-        $this->chartColor = $chartColor;
-        $this->backgroundColor = $backgroundColor;
         $this->gap = $gap;
         $this->rounded = $rounded;
         $this->showGrid = $showGrid;
@@ -56,9 +53,8 @@ class BarChart extends Component
         $this->formatValues = $formatValues;
         $this->label = $label;
         $this->value = $value;
-        $this->title = $title;
-        $this->border = $border;
-        $this->borderColor = $borderColor;
+        
+        $this->initializeChartStyling($title, $border, $borderColor, $backgroundColor, $chartColor);
     }
 
     public function render()
@@ -92,15 +88,12 @@ class BarChart extends Component
             }
         }
 
-        return view('beartropy-charts::bar-chart', [
+        return view('beartropy-charts::bar-chart', array_merge([
             'items' => $items,
             'gapClass' => $gapClass,
             'roundedClass' => $roundedClass,
             'yAxisTicks' => $yAxisTicks,
-            'backgroundColor' => $this->backgroundColor,
-            'border' => $this->border,
-            'borderColor' => $this->borderColor,
-        ]);
+        ], $this->getStylingVariables()));
     }
 
     protected function prepareItems(): array
@@ -109,40 +102,7 @@ class BarChart extends Component
             return [];
         }
 
-        // Expanded palette for auto-assignment
-        $palette = [
-            'yellow',
-            'slate',
-            'red',
-            'sky',
-            'indigo',
-            'lime',
-            'gray',
-            'blue',
-            'orange',
-            'teal',
-            'zinc',
-            'fuchsia',
-            'emerald',
-            'rose',
-            'violet',
-            'neutral',
-            'amber',
-            'cyan',
-            'purple',
-            'stone',
-            'green',
-            'pink',
-        ];
-
-        if ($this->chartColor) {
-             if (is_array($this->chartColor)) {
-                 $palette = $this->chartColor;
-             } else {
-                 $palette = [$this->chartColor];
-             }
-        }
-
+        $palette = $this->getColorPalette();
 
         // Normalize data structure
         // Supports: [10, 20, 30] or [['label' => 'A', 'value' => 10], ...]
@@ -182,22 +142,5 @@ class BarChart extends Component
         }
 
         return $items;
-    }
-
-    protected function isCssColor(string $color): bool
-    {
-        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
-    }
-
-    protected function isTailwindClass(string $color): bool
-    {
-        // If it contains spaces or starts with common Tailwind prefixes, it's a full class string
-        return str_contains($color, ' ') || 
-               str_starts_with($color, 'bg-') || 
-               str_starts_with($color, 'text-') ||
-               str_starts_with($color, 'border-') ||
-               str_starts_with($color, 'from-') ||
-               str_starts_with($color, 'to-') ||
-               str_starts_with($color, 'via-');
     }
 }
