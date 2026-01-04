@@ -1,0 +1,144 @@
+<x-beartropy-charts::chart-wrapper 
+    :title="$title"
+    :border="$border"
+    :borderColor="$borderColor"
+    :backgroundColor="$backgroundColor"
+    {{ $attributes }}
+>
+    <div @class([
+        'flex items-center w-full gap-6',
+        'flex-col' => $legendPosition === 'bottom',
+        'flex-row' => $legendPosition === 'right',
+    ])>
+        <!-- Chart Area -->
+        <div class="relative {{ $height }} w-auto flex-shrink-0 flex justify-center items-center">
+             <svg class="h-full w-auto" viewBox="0 0 100 100">
+                <!-- Shadow filter definition -->
+                <defs>
+                    <filter id="polar-segment-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+                    </filter>
+                </defs>
+                
+                <!-- Grid circles -->
+                @if($showGrid)
+                    @for($i = 1; $i <= $gridLevels; $i++)
+                        @php
+                            $gridRadius = (40 / $gridLevels) * $i;
+                        @endphp
+                        <circle 
+                            cx="50" 
+                            cy="50" 
+                            r="{{ $gridRadius }}" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            stroke-width="0.2" 
+                            class="text-gray-200 dark:text-gray-700"
+                        />
+                    @endfor
+                @endif
+                
+                <!-- Grid lines radiating from center -->
+                @if($showGrid && !empty($segments))
+                    @foreach($segments as $index => $segment)
+                        @php
+                            $anglePerSegment = 360 / count($segments);
+                            $angle = $index * $anglePerSegment - 90;
+                            $rad = deg2rad($angle);
+                            $x = 50 + 40 * cos($rad);
+                            $y = 50 + 40 * sin($rad);
+                        @endphp
+                        <line 
+                            x1="50" 
+                            y1="50" 
+                            x2="{{ $x }}" 
+                            y2="{{ $y }}" 
+                            stroke="currentColor" 
+                            stroke-width="0.2" 
+                            class="text-gray-200 dark:text-gray-700"
+                        />
+                    @endforeach
+                @endif
+                
+                <!-- Segments -->
+                @foreach($segments as $segment)
+                    <g class="polar-segment-group">
+                        <path 
+                            d="{{ $segment['path'] }}" 
+                            fill="{{ $segment['color_is_css'] ? $segment['color'] : 'currentColor' }}"
+                            class="polar-segment {{ $segment['color_is_tailwind_class'] ? $segment['color'] . ' hover:opacity-80' : (!$segment['color_is_css'] ? 'text-' . $segment['color'] . '-500 hover:text-' . $segment['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            stroke-width="0.1"
+                        >
+                            <title>{{ $segment['label'] }}: {{ $segment['formatted_value'] }} ({{ $segment['percent'] }}%)</title>
+                        </path>
+                        
+                        <!-- Value labels inside segments -->
+                        @if($showLabels && $segment['percent'] > 10)
+                            <text 
+                                x="{{ $segment['value_x'] }}" 
+                                y="{{ $segment['value_y'] }}" 
+                                text-anchor="middle" 
+                                dominant-baseline="middle" 
+                                class="polar-value-label fill-{{ $labelColor }} text-[3.5px] font-semibold pointer-events-none select-none transition-all duration-200"
+                                style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
+                            >
+                                {{ $segment['formatted_value'] }}
+                            </text>
+                        @endif
+                        
+                        <!-- Category labels outside -->
+                        <text 
+                            x="{{ $segment['label_x'] }}" 
+                            y="{{ $segment['label_y'] }}" 
+                            text-anchor="middle" 
+                            dominant-baseline="middle" 
+                            class="polar-category-label fill-gray-600 dark:fill-gray-300 text-[3px] font-medium pointer-events-none select-none"
+                        >
+                            {{ $segment['label'] }}
+                        </text>
+                    </g>
+                @endforeach
+             </svg>
+        </div>
+
+        <!-- Legend -->
+        @if($legendPosition !== 'none' && $legendPosition !== 'hidden')
+            <div @class([
+                'flex gap-4 text-xs overflow-y-auto max-h-64 pr-2',
+                'flex-col w-64' => $legendPosition === 'right',
+                'flex-row flex-wrap justify-center w-full' => $legendPosition === 'bottom',
+            ])>
+                @foreach($segments as $segment)
+                    <div class="flex items-center gap-2 group cursor-default">
+                        <div class="w-3 h-3 rounded-full {{ $segment['color_is_tailwind_class'] ? $segment['color'] : (!$segment['color_is_css'] ? 'bg-' . $segment['color'] . '-500' : '') }} group-hover:scale-110 transition-transform flex-shrink-0"
+                             style="{{ $segment['color_is_css'] ? 'background-color: ' . $segment['color'] . ';' : '' }}"
+                        ></div>
+                        <div class="flex justify-between items-baseline gap-2">
+                            <span class="text-gray-600 dark:text-gray-300 truncate">{{ $segment['label'] }}</span>
+                            <div class="flex items-center gap-1">
+                                <span class="font-bold text-gray-900 dark:text-gray-100">{{ $segment['formatted_value'] }}</span>
+                                <span class="text-gray-400 dark:text-gray-500 scale-90">({{ $segment['percent'] }}%)</span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+    
+    <style>
+        .polar-segment {
+            filter: none;
+        }
+        .polar-segment:hover {
+            filter: url(#polar-segment-shadow);
+        }
+        .polar-segment-group:hover .polar-value-label {
+            font-size: 4.5px;
+        }
+        .polar-segment-group:hover .polar-category-label {
+            font-size: 3.5px;
+            font-weight: 600;
+        }
+    </style>
+</x-beartropy-charts::chart-wrapper>

@@ -14,19 +14,12 @@ class ChartsServiceProvider extends ServiceProvider
 
         Blade::componentNamespace('Beartropy\\Charts\\Components', 'beartropy-charts');
 
-        $components = [
-            'LineChart',
-            'BarChart',
-            'PieChart',
-            'ChartWrapper',
-        ];
-
-        foreach ($components as $component) {
+        foreach (glob(__DIR__ . '/Components/*.php') as $file) {
+            $component = basename($file, '.php');
             $class = 'Beartropy\\Charts\\Components\\' . $component;
             $alias = 'bt-' . Str::kebab($component);
-            
+
             Blade::component($class, $alias);
-            
         }
     }
 }
