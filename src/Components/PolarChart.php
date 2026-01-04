@@ -77,8 +77,8 @@ class PolarChart extends Component
         $count = count($items);
         $anglePerSegment = 360 / $count;
         
-        $cx = 50;
-        $cy = 50;
+        $cx = 60;
+        $cy = 60;
         $maxRadius = 40; // Maximum radius leaving some padding
 
         foreach ($items as $index => $item) {

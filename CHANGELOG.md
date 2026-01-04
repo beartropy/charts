@@ -3,6 +3,13 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.4] - 2026-01-04
+
+### Fixed
+- Fixed label truncation in Radar Chart where long labels (e.g., "Marketing") were being cut off at the edges
+- Fixed label truncation in Polar Chart where category labels were clipped at cardinal positions
+- Expanded SVG viewBox from 100x100 to 120x120 to provide adequate spacing for labels in all positions
+
 ## [1.1.3] - 2026-01-04
 
 ### Added

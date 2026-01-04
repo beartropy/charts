@@ -177,8 +177,8 @@ class RadarChart extends Component
 
         // Prepare axes data
         $axesData = [];
-        $cx = 50;
-        $cy = 50;
+        $cx = 60;
+        $cy = 60;
         $maxRadius = 40;
         $numAxes = count($axes);
 
@@ -212,8 +212,8 @@ class RadarChart extends Component
 
     protected function calculatePolygonPoints(array $points, array $axes, float $maxValue): string
     {
-        $cx = 50;
-        $cy = 50;
+        $cx = 60;
+        $cy = 60;
         $maxRadius = 40;
         $numAxes = count($axes);
         

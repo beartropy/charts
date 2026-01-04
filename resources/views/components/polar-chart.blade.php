@@ -12,7 +12,7 @@
     ])>
         <!-- Chart Area -->
         <div class="relative {{ $height }} w-auto flex-shrink-0 flex justify-center items-center">
-             <svg class="h-full w-auto" viewBox="0 0 100 100">
+             <svg class="h-full w-auto" viewBox="0 0 120 120">
                 <!-- Shadow filter definition -->
                 <defs>
                     <filter id="polar-segment-shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -27,8 +27,8 @@
                             $gridRadius = (40 / $gridLevels) * $i;
                         @endphp
                         <circle 
-                            cx="50" 
-                            cy="50" 
+                            cx="60" 
+                            cy="60" 
                             r="{{ $gridRadius }}" 
                             fill="none" 
                             stroke="currentColor" 
@@ -45,12 +45,12 @@
                             $anglePerSegment = 360 / count($segments);
                             $angle = $index * $anglePerSegment - 90;
                             $rad = deg2rad($angle);
-                            $x = 50 + 40 * cos($rad);
-                            $y = 50 + 40 * sin($rad);
+                            $x = 60 + 40 * cos($rad);
+                            $y = 60 + 40 * sin($rad);
                         @endphp
                         <line 
-                            x1="50" 
-                            y1="50" 
+                            x1="60" 
+                            y1="60" 
                             x2="{{ $x }}" 
                             y2="{{ $y }}" 
                             stroke="currentColor" 

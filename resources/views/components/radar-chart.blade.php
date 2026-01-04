@@ -15,7 +15,7 @@
     >
         <!-- Chart Area -->
         <div class="relative {{ $height }} w-auto flex-shrink-0 flex justify-center items-center">
-             <svg class="h-full w-auto" viewBox="0 0 100 100">
+             <svg class="h-full w-auto" viewBox="0 0 120 120">
                 <!-- Shadow filter definition -->
                 <defs>
                     <filter id="radar-shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -30,8 +30,8 @@
                             $gridRadius = (40 / $gridLevels) * $i;
                         @endphp
                         <circle 
-                            cx="50" 
-                            cy="50" 
+                            cx="60" 
+                            cy="60" 
                             r="{{ $gridRadius }}" 
                             fill="none" 
                             stroke="currentColor" 
@@ -45,8 +45,8 @@
                 @if($showAxes && !empty($axes))
                     @foreach($axes as $axis)
                         <line 
-                            x1="50" 
-                            y1="50" 
+                            x1="60" 
+                            y1="60" 
                             x2="{{ $axis['x'] }}" 
                             y2="{{ $axis['y'] }}" 
                             stroke="currentColor" 
@@ -92,8 +92,8 @@
                                 $rad = deg2rad($angle);
                                 $normalizedValue = $point['value'] / $maxValue;
                                 $radius = 40 * $normalizedValue;
-                                $pointX = 50 + $radius * cos($rad);
-                                $pointY = 50 + $radius * sin($rad);
+                                $pointX = 60 + $radius * cos($rad);
+                                $pointY = 60 + $radius * sin($rad);
                             @endphp
                             <circle 
                                 cx="{{ $pointX }}" 
