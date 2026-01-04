@@ -42,10 +42,10 @@
                             <polyline 
                                 points="{{ $dataset['points'] }}" 
                                 fill="none" 
-                                stroke="{{ $dataset['color_is_css'] ? $dataset['color'] : 'currentColor' }}"
+                                stroke="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
                                 stroke-width="2" 
                                 vector-effect="non-scaling-stroke"
-                                class="{{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : (!$dataset['color_is_css'] ? 'text-' . $dataset['color'] . '-500' : '') }} transition-all duration-500 ease-out"
+                                class="{{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-500 ease-out"
                             />
                         @endforeach
                     </svg>
@@ -61,8 +61,8 @@
                                     style="left: {{ $point['x'] }}%; top: {{ $point['y'] }}%; transform: translate(-50%, -50%);"
                                 >
                                     <!-- Dot -->
-                                    <div class="w-2 h-2 rounded-full {{ $point['color_is_tailwind_class'] ? $point['color'] : (!$point['color_is_css'] ? 'bg-' . $point['color'] . '-500' : '') }} border border-white dark:border-gray-800 shadow-sm pointer-events-auto hover:scale-125 transition-transform"
-                                         style="{{ $point['color_is_css'] ? 'background-color: ' . $point['color'] . ';' : '' }}"
+                                    <div class="w-2 h-2 rounded-full {{ $point['color_is_tailwind_class'] ? $point['color'] : '' }} border border-white dark:border-gray-800 shadow-sm pointer-events-auto hover:scale-125 transition-transform"
+                                         style="{{ !$point['color_is_tailwind_class'] ? 'background-color: ' . $point['color'] . ';' : '' }}"
                                     ></div>
                                     
                                     <!-- Label -->

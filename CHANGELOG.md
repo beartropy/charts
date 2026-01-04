@@ -3,6 +3,14 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.2] - 2026-01-04
+
+### Fixed
+- Fixed dynamic Tailwind class construction issue where internal palette colors (e.g., `blue`, `red`) were being built as dynamic classes like `'bg-' . $color . '-500'`, preventing Tailwind JIT compiler from detecting them
+- All internal palette colors are now converted to their CSS hex equivalents (e.g., `blue` → `#3b82f6`) and applied as inline styles
+- User-provided Tailwind classes (e.g., `bg-rose-300/60`) continue to work correctly as they're evaluated in the user's project
+- Removed duplicate `isCssColor()` and `isTailwindClass()` methods across all chart components, now using shared trait methods
+
 ## [1.1.1] - 2026-01-04
 
 ### Fixed

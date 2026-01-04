@@ -43,8 +43,8 @@
                         @endif
 
                         <!-- Bar -->
-                        <div style="height: {{ $item['percentage'] }}%; {{ $item['color_is_css'] ? 'background-color: ' . $item['color'] . ';' : '' }}"
-                            class="w-full {{ $roundedClass }} {{ $item['color_is_tailwind_class'] ? $item['color'] : (!$item['color_is_css'] ? 'bg-' . $item['color'] . '-500' : '') }} transition-all duration-500 ease-out">
+                        <div style="height: {{ $item['percentage'] }}%; {{ !$item['color_is_tailwind_class'] ? 'background-color: ' . $item['color'] . ';' : '' }}"
+                            class="w-full {{ $roundedClass }} {{ $item['color_is_tailwind_class'] ? $item['color'] : '' }} transition-all duration-500 ease-out">
                         </div>
                     </div>
                 @endforeach

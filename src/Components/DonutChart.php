@@ -165,19 +165,7 @@ class DonutChart extends Component
 
     protected function extractItems(): array
     {
-        $palette = [
-            'yellow', 'slate', 'red', 'sky', 'indigo', 'lime', 'gray', 'blue', 'orange', 'teal',
-            'zinc', 'fuchsia', 'emerald', 'rose', 'violet', 'neutral', 'amber', 'cyan', 'purple',
-            'stone', 'green', 'pink',
-        ];
-
-        if ($this->chartColor) {
-             if (is_array($this->chartColor)) {
-                 $palette = $this->chartColor;
-             } else {
-                 $palette = [$this->chartColor];
-             }
-        }
+        $palette = $this->getColorPalette();
 
         $items = [];
         $index = 0;
@@ -187,6 +175,19 @@ class DonutChart extends Component
 
             if (is_array($value)) {
                 $color = $value['color'] ?? $autoColor;
+            } else {
+                $color = $autoColor;
+            }
+            
+            // Convert internal palette colors to CSS to avoid dynamic class construction
+            if (!$this->isCssColor($color) && !$this->isTailwindClass($color)) {
+                $cssColor = $this->getTailwindColorValue($color);
+                if ($cssColor) {
+                    $color = $cssColor;
+                }
+            }
+            
+            if (is_array($value)) {
                 $items[] = [
                     'value' => $value[$this->value] ?? 0,
                     'label' => $value[$this->label] ?? (string)$key,
@@ -198,9 +199,9 @@ class DonutChart extends Component
                 $items[] = [
                     'value' => $value,
                     'label' => (string)$key,
-                    'color' => $autoColor,
-                    'color_is_css' => $this->isCssColor($autoColor),
-                    'color_is_tailwind_class' => $this->isTailwindClass($autoColor),
+                    'color' => $color,
+                    'color_is_css' => $this->isCssColor($color),
+                    'color_is_tailwind_class' => $this->isTailwindClass($color),
                 ];
             }
             $index++;
@@ -209,19 +210,5 @@ class DonutChart extends Component
         return $items;
     }
 
-    protected function isCssColor(string $color): bool
-    {
-        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
-    }
 
-    protected function isTailwindClass(string $color): bool
-    {
-        return str_contains($color, ' ') || 
-               str_starts_with($color, 'bg-') || 
-               str_starts_with($color, 'text-') ||
-               str_starts_with($color, 'border-') ||
-               str_starts_with($color, 'from-') ||
-               str_starts_with($color, 'to-') ||
-               str_starts_with($color, 'via-');
-    }
 }

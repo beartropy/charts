@@ -213,58 +213,45 @@ class LineChart extends Component
             return [];
         }
 
-        $palette = [
-            'yellow',
-            'slate',
-            'red',
-            'sky',
-            'indigo',
-            'lime',
-            'gray',
-            'blue',
-            'orange',
-            'teal',
-            'zinc',
-            'fuchsia',
-            'emerald',
-            'rose',
-            'violet',
-            'neutral',
-            'amber',
-            'cyan',
-            'purple',
-            'stone',
-            'green',
-            'pink',
-        ];
-
         $palette = $this->getColorPalette();
         $normalized = [];
         
         // Detect if multidimensional (multiple datasets) or simple array
-        // A simple array of scalars is one dataset.
-        // An array of arrays *could* be one dataset with labels, OR multiple datasets.
-        // Let's assume:
-        // - [10, 20] -> Single dataset
-        // - [['label'=>'Jan', 'value'=>10], ...] -> Single dataset
-        // - [['label' => 'Series A', 'data' => [10, 20]], ...] -> Multiple datasets
-        
         $isMultiple = isset($this->data[0]) 
             && is_array($this->data[0]) 
             && (isset($this->data[0]['data']) || isset($this->data[0]['values']));
 
         if (!$isMultiple) {
             // Treat as single dataset
+            $color = $palette[0];
+            
+            // Convert internal palette colors to CSS to avoid dynamic class construction
+            if (!$this->isCssColor($color) && !$this->isTailwindClass($color)) {
+                $cssColor = $this->getTailwindColorValue($color);
+                if ($cssColor) {
+                    $color = $cssColor;
+                }
+            }
+            
             $normalized[] = [
                 'label' => 'Dataset 1',
-                'color' => $palette[0],
-                'color_is_css' => $this->isCssColor($palette[0]),
-                'color_is_tailwind_class' => $this->isTailwindClass($palette[0]),
+                'color' => $color,
+                'color_is_css' => $this->isCssColor($color),
+                'color_is_tailwind_class' => $this->isTailwindClass($color),
                 'values' => $this->extractValues($this->data),
             ];
         } else {
             foreach ($this->data as $index => $series) {
                 $color = $series['color'] ?? $palette[$index % count($palette)];
+                
+                // Convert internal palette colors to CSS to avoid dynamic class construction
+                if (!$this->isCssColor($color) && !$this->isTailwindClass($color)) {
+                    $cssColor = $this->getTailwindColorValue($color);
+                    if ($cssColor) {
+                        $color = $cssColor;
+                    }
+                }
+                
                 $normalized[] = [
                     'label' => $series['label'] ?? "Series " . ($index + 1),
                     'color' => $color,
@@ -291,20 +278,5 @@ class LineChart extends Component
         return $values;
     }
 
-    protected function isCssColor(string $color): bool
-    {
-        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
-    }
 
-    protected function isTailwindClass(string $color): bool
-    {
-        // If it contains spaces or starts with common Tailwind prefixes, it's a full class string
-        return str_contains($color, ' ') || 
-               str_starts_with($color, 'bg-') || 
-               str_starts_with($color, 'text-') ||
-               str_starts_with($color, 'border-') ||
-               str_starts_with($color, 'from-') ||
-               str_starts_with($color, 'to-') ||
-               str_starts_with($color, 'via-');
-    }
 }

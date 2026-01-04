@@ -65,8 +65,8 @@
                     <g class="polar-segment-group">
                         <path 
                             d="{{ $segment['path'] }}" 
-                            fill="{{ $segment['color_is_css'] ? $segment['color'] : 'currentColor' }}"
-                            class="polar-segment {{ $segment['color_is_tailwind_class'] ? $segment['color'] . ' hover:opacity-80' : (!$segment['color_is_css'] ? 'text-' . $segment['color'] . '-500 hover:text-' . $segment['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            fill="{{ !$segment['color_is_tailwind_class'] ? $segment['color'] : 'currentColor' }}"
+                            class="polar-segment {{ $segment['color_is_tailwind_class'] ? $segment['color'] : '' }} hover:opacity-80 transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
                             stroke-width="0.1"
                         >
                             <title>{{ $segment['label'] }}: {{ $segment['formatted_value'] }} ({{ $segment['percent'] }}%)</title>
@@ -110,8 +110,8 @@
             ])>
                 @foreach($segments as $segment)
                     <div class="flex items-center gap-2 group cursor-default">
-                        <div class="w-3 h-3 rounded-full {{ $segment['color_is_tailwind_class'] ? $segment['color'] : (!$segment['color_is_css'] ? 'bg-' . $segment['color'] . '-500' : '') }} group-hover:scale-110 transition-transform flex-shrink-0"
-                             style="{{ $segment['color_is_css'] ? 'background-color: ' . $segment['color'] . ';' : '' }}"
+                        <div class="w-3 h-3 rounded-full {{ $segment['color_is_tailwind_class'] ? $segment['color'] : '' }} group-hover:scale-110 transition-transform flex-shrink-0"
+                             style="{{ !$segment['color_is_tailwind_class'] ? 'background-color: ' . $segment['color'] . ';' : '' }}"
                         ></div>
                         <div class="flex justify-between items-baseline gap-2">
                             <span class="text-gray-600 dark:text-gray-300 truncate">{{ $segment['label'] }}</span>

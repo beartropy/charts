@@ -60,8 +60,8 @@
                         @if($fillArea)
                             <polygon 
                                 points="{{ $dataset['polygon_points'] }}" 
-                                fill="{{ $dataset['color_is_css'] ? $dataset['color'] : 'currentColor' }}"
-                                class="{{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : (!$dataset['color_is_css'] ? 'text-' . $dataset['color'] . '-500' : '') }} transition-all duration-200"
+                                fill="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
+                                class="{{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200"
                                 style="opacity: {{ $fillOpacity }};"
                             />
                         @endif
@@ -70,8 +70,8 @@
                         <polygon 
                             points="{{ $dataset['polygon_points'] }}" 
                             fill="none"
-                            stroke="{{ $dataset['color_is_css'] ? $dataset['color'] : 'currentColor' }}"
-                            class="radar-polygon {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : (!$dataset['color_is_css'] ? 'text-' . $dataset['color'] . '-500' : '') }} transition-all duration-200 cursor-pointer hover:stroke-[1.5]"
+                            stroke="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
+                            class="radar-polygon {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200 cursor-pointer hover:stroke-[1.5]"
                             stroke-width="1"
                         >
                             <title>{{ $dataset['label'] }}</title>
@@ -92,8 +92,8 @@
                                 cx="{{ $pointX }}" 
                                 cy="{{ $pointY }}" 
                                 r="1" 
-                                fill="{{ $dataset['color_is_css'] ? $dataset['color'] : 'currentColor' }}"
-                                class="radar-point {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : (!$dataset['color_is_css'] ? 'text-' . $dataset['color'] . '-600' : '') }} transition-all duration-200 hover:r-[1.5]"
+                                fill="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
+                                class="radar-point {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200 hover:r-[1.5]"
                                 stroke="white"
                                 stroke-width="0.3"
                             >
@@ -143,8 +143,8 @@
                     <div class="flex flex-col gap-2">
                         <!-- Dataset header -->
                         <div class="flex items-center gap-2 group cursor-default">
-                            <div class="w-3 h-3 rounded-full {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : (!$dataset['color_is_css'] ? 'bg-' . $dataset['color'] . '-500' : '') }} group-hover:scale-110 transition-transform flex-shrink-0"
-                                 style="{{ $dataset['color_is_css'] ? 'background-color: ' . $dataset['color'] . ';' : '' }}"
+                            <div class="w-3 h-3 rounded-full {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} group-hover:scale-110 transition-transform flex-shrink-0"
+                                 style="{{ !$dataset['color_is_tailwind_class'] ? 'background-color: ' . $dataset['color'] . ';' : '' }}"
                             ></div>
                             <span class="font-semibold text-gray-700 dark:text-gray-200">{{ $dataset['label'] }}</span>
                         </div>

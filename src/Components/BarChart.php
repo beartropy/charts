@@ -129,6 +129,14 @@ class BarChart extends Component
                 $item['color'] = $autoColor;
             }
             
+            // Convert internal palette colors to CSS to avoid dynamic class construction
+            if (!$this->isCssColor($item['color']) && !$this->isTailwindClass($item['color'])) {
+                $cssColor = $this->getTailwindColorValue($item['color']);
+                if ($cssColor) {
+                    $item['color'] = $cssColor;
+                }
+            }
+            
             $item['color_is_css'] = $this->isCssColor($item['color']);
             $item['color_is_tailwind_class'] = $this->isTailwindClass($item['color']);
 

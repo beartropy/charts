@@ -24,8 +24,8 @@
                     <g class="pie-slice-group">
                         <path 
                             d="{{ $slice['path'] }}" 
-                            fill="{{ $slice['color_is_css'] ? $slice['color'] : 'currentColor' }}"
-                            class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] . ' hover:opacity-80' : (!$slice['color_is_css'] ? 'text-' . $slice['color'] . '-500 hover:text-' . $slice['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            fill="{{ !$slice['color_is_tailwind_class'] ? $slice['color'] : 'currentColor' }}"
+                            class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] : '' }} hover:opacity-80 transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
                             stroke-width="0"
                         >
                             <title>{{ $slice['label'] }}: {{ $slice['formatted_value'] }} ({{ $slice['percent'] }}%)</title>
@@ -57,8 +57,8 @@
             ])>
                 @foreach($slices as $slice)
                     <div class="flex items-center gap-2 group cursor-default">
-                        <div class="w-3 h-3 rounded-full {{ $slice['color_is_tailwind_class'] ? $slice['color'] : (!$slice['color_is_css'] ? 'bg-' . $slice['color'] . '-500' : '') }} group-hover:scale-110 transition-transform flex-shrink-0"
-                             style="{{ $slice['color_is_css'] ? 'background-color: ' . $slice['color'] . ';' : '' }}"
+                        <div class="w-3 h-3 rounded-full {{ $slice['color_is_tailwind_class'] ? $slice['color'] : '' }} group-hover:scale-110 transition-transform flex-shrink-0"
+                             style="{{ !$slice['color_is_tailwind_class'] ? 'background-color: ' . $slice['color'] . ';' : '' }}"
                         ></div>
                         <div class="flex justify-between items-baseline gap-2">
                             <span class="text-gray-600 dark:text-gray-300 truncate">{{ $slice['label'] }}</span>

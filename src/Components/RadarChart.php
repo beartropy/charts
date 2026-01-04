@@ -122,7 +122,7 @@ class RadarChart extends Component
 
         // Prepare datasets
         $datasets = [];
-        $palette = $this->getPalette();
+        $palette = $this->getColorPalette();
         $index = 0;
 
         foreach ($this->data as $key => $dataset) {
@@ -130,6 +130,15 @@ class RadarChart extends Component
             
             if (is_array($dataset)) {
                 $color = $dataset['color'] ?? $autoColor;
+                
+                // Convert internal palette colors to CSS to avoid dynamic class construction
+                if (!$this->isCssColor($color) && !$this->isTailwindClass($color)) {
+                    $cssColor = $this->getTailwindColorValue($color);
+                    if ($cssColor) {
+                        $color = $cssColor;
+                    }
+                }
+                
                 $datasetLabel = $dataset[$this->label] ?? $dataset['label'] ?? "Dataset " . ($index + 1);
                 
                 // Extract data points
@@ -235,37 +244,5 @@ class RadarChart extends Component
         return implode(' ', $polygonPoints);
     }
 
-    protected function getPalette(): array
-    {
-        $palette = [
-            'blue', 'red', 'green', 'orange', 'purple', 'teal', 
-            'pink', 'indigo', 'yellow', 'cyan', 'lime', 'fuchsia',
-        ];
 
-        if ($this->chartColor) {
-            if (is_array($this->chartColor)) {
-                $palette = $this->chartColor;
-            } else {
-                $palette = [$this->chartColor];
-            }
-        }
-
-        return $palette;
-    }
-
-    protected function isCssColor(string $color): bool
-    {
-        return str_starts_with($color, '#') || str_starts_with($color, 'rgb') || str_starts_with($color, 'hsl');
-    }
-
-    protected function isTailwindClass(string $color): bool
-    {
-        return str_contains($color, ' ') || 
-               str_starts_with($color, 'bg-') || 
-               str_starts_with($color, 'text-') ||
-               str_starts_with($color, 'border-') ||
-               str_starts_with($color, 'from-') ||
-               str_starts_with($color, 'to-') ||
-               str_starts_with($color, 'via-');
-    }
 }
