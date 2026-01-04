@@ -5,11 +5,14 @@
     :backgroundColor="$backgroundColor"
     {{ $attributes }}
 >
-    <div @class([
-        'flex items-center w-full gap-6',
-        'flex-col' => $legendPosition === 'bottom',
-        'flex-row' => $legendPosition === 'right',
-    ])>
+    <div 
+        x-data="{ hoveredDataset: null }"
+        @class([
+            'flex items-center w-full gap-6',
+            'flex-col' => $legendPosition === 'bottom',
+            'flex-row' => $legendPosition === 'right',
+        ])
+    >
         <!-- Chart Area -->
         <div class="relative {{ $height }} w-auto flex-shrink-0 flex justify-center items-center">
              <svg class="h-full w-auto" viewBox="0 0 100 100">
@@ -54,15 +57,17 @@
                 @endif
                 
                 <!-- Data polygons -->
-                @foreach($datasets as $dataset)
-                    <g class="radar-dataset-group">
+                @foreach($datasets as $datasetIndex => $dataset)
+                    <g class="radar-dataset-group"
+                       @mouseenter="hoveredDataset = {{ $datasetIndex }}"
+                       @mouseleave="hoveredDataset = null">
                         <!-- Filled area -->
                         @if($fillArea)
                             <polygon 
                                 points="{{ $dataset['polygon_points'] }}" 
                                 fill="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
                                 class="{{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200"
-                                style="opacity: {{ $fillOpacity }};"
+                                :style="hoveredDataset === null || hoveredDataset === {{ $datasetIndex }} ? 'opacity: {{ $fillOpacity }};' : 'opacity: 0.15;'"
                             />
                         @endif
                         
@@ -71,8 +76,10 @@
                             points="{{ $dataset['polygon_points'] }}" 
                             fill="none"
                             stroke="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
-                            class="radar-polygon {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200 cursor-pointer hover:stroke-[1.5]"
+                            class="radar-polygon {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200 cursor-pointer"
+                            :class="{ 'opacity-30': hoveredDataset !== null && hoveredDataset !== {{ $datasetIndex }} }"
                             stroke-width="1"
+                            :stroke-width="hoveredDataset === {{ $datasetIndex }} ? '1.5' : '1'"
                         >
                             <title>{{ $dataset['label'] }}</title>
                         </polygon>
@@ -93,24 +100,25 @@
                                 cy="{{ $pointY }}" 
                                 r="1" 
                                 fill="{{ !$dataset['color_is_tailwind_class'] ? $dataset['color'] : 'currentColor' }}"
-                                class="radar-point {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200 hover:r-[1.5]"
+                                class="radar-point {{ $dataset['color_is_tailwind_class'] ? $dataset['color'] : '' }} transition-all duration-200"
+                                :class="{ 'opacity-30': hoveredDataset !== null && hoveredDataset !== {{ $datasetIndex }} }"
                                 stroke="white"
                                 stroke-width="0.3"
                             >
                                 <title>{{ $point['axis'] }}: {{ sprintf($formatValues, $point['value']) }}</title>
                             </circle>
                             
-                            @if($showValues)
-                                <text 
-                                    x="{{ $pointX }}" 
-                                    y="{{ $pointY - 3 }}" 
-                                    text-anchor="middle" 
-                                    dominant-baseline="middle" 
-                                    class="radar-value-label fill-gray-700 dark:fill-gray-200 text-[3px] font-medium pointer-events-none select-none"
-                                >
-                                    {{ sprintf($formatValues, $point['value']) }}
-                                </text>
-                            @endif
+                            {{-- Show values on hover regardless of showValues prop --}}
+                            <text 
+                                x="{{ $pointX }}" 
+                                y="{{ $pointY - 3 }}" 
+                                text-anchor="middle" 
+                                dominant-baseline="middle" 
+                                class="radar-value-label fill-gray-700 dark:fill-gray-200 text-[3px] font-medium pointer-events-none select-none transition-opacity duration-200"
+                                :style="hoveredDataset === {{ $datasetIndex }} ? 'opacity: 1;' : 'opacity: 0;'"
+                            >
+                                {{ sprintf($formatValues, $point['value']) }}
+                            </text>
                         @endforeach
                     </g>
                 @endforeach

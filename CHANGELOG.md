@@ -3,6 +3,13 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.3] - 2026-01-04
+
+### Added
+- Added interactive hover functionality to Radar Chart to display dataset values directly on the chart
+- Dataset values now appear on hover instead of being always visible, improving chart readability
+- Enhanced visual feedback with opacity changes and stroke width adjustments when hovering over datasets
+
 ## [1.1.2] - 2026-01-04
 
 ### Fixed
