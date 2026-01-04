@@ -21,11 +21,11 @@
                 </defs>
                 
                 @foreach($slices as $slice)
-                    <g class="pie-slice-group">
+                    <g class="pie-slice-group hover:scale-105 origin-center transition-all duration-200">
                         <path 
                             d="{{ $slice['path'] }}" 
                             fill="{{ !$slice['color_is_tailwind_class'] ? $slice['color'] : 'currentColor' }}"
-                            class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] : '' }} hover:opacity-80 transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] : '' }} hover:opacity-80 transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800"
                             stroke-width="0"
                         >
                             <title>{{ $slice['label'] }}: {{ $slice['formatted_value'] }} ({{ $slice['percent'] }}%)</title>

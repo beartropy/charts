@@ -10,7 +10,7 @@ class PolarChart extends Component
     use HasChartStyling;
 
     public array $data = [];
-    public string $height = 'h-80';
+    public string $height = 'h-96';
     public bool $showLabels = true;
     public string $legendPosition = 'right';
     public string $formatValues = '%s';

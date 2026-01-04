@@ -3,6 +3,16 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.6] - 2026-01-04
+
+### Changed
+- Improved default height of Polar Chart from `h-80` to `h-96`
+- Updated Polar Chart hover styles for better label visibility
+
+### Fixed
+- Fixed Pie Chart hover effect to ensure percentage labels scale/move with the slice
+- Fixed Polar Chart hover effect to ensure value labels scale/move with the segment
+
 ## [1.1.5] - 2026-01-04
 
 ### Added

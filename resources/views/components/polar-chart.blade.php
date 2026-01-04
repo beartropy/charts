@@ -62,11 +62,11 @@
                 
                 <!-- Segments -->
                 @foreach($segments as $segment)
-                    <g class="polar-segment-group">
+                    <g class="polar-segment-group hover:scale-105 origin-center transition-all duration-200">
                         <path 
                             d="{{ $segment['path'] }}" 
                             fill="{{ !$segment['color_is_tailwind_class'] ? $segment['color'] : 'currentColor' }}"
-                            class="polar-segment {{ $segment['color_is_tailwind_class'] ? $segment['color'] : '' }} hover:opacity-80 transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            class="polar-segment {{ $segment['color_is_tailwind_class'] ? $segment['color'] : '' }} hover:opacity-80 transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800"
                             stroke-width="0.1"
                         >
                             <title>{{ $segment['label'] }}: {{ $segment['formatted_value'] }} ({{ $segment['percent'] }}%)</title>
@@ -79,7 +79,7 @@
                                 y="{{ $segment['value_y'] }}" 
                                 text-anchor="middle" 
                                 dominant-baseline="middle" 
-                                class="polar-value-label fill-{{ $labelColor }} text-[3.5px] font-semibold pointer-events-none select-none transition-all duration-200"
+                                class="polar-value-label fill-{{ $labelColor }} text-[4px] pointer-events-none select-none transition-all duration-200"
                                 style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
                             >
                                 {{ $segment['formatted_value'] }}
@@ -134,11 +134,12 @@
             filter: url(#polar-segment-shadow);
         }
         .polar-segment-group:hover .polar-value-label {
-            font-size: 4.5px;
+            font-size: 4.3px;
+            font-weight: 700;
         }
         .polar-segment-group:hover .polar-category-label {
-            font-size: 3.5px;
-            font-weight: 600;
+            font-size: 4px;
+            font-weight: 700;
         }
     </style>
 </x-beartropy-charts::chart-wrapper>
