@@ -3,6 +3,11 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.8] - 2026-01-04
+
+### Added
+- Added `legendPosition` prop to Line Chart component to support bottom and right legend placement (default: bottom)
+
 ## [1.1.7] - 2026-01-04
 
 ### Changed

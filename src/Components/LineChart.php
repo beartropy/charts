@@ -21,6 +21,7 @@ class LineChart extends Component
     public string $dataLabels = 'hover';
     public ?string $xAxisTitle = null;
     public ?string $yAxisTitle = null;
+    public string $legendPosition = 'bottom';
 
     public function __construct(
         array $data = [],
@@ -39,7 +40,8 @@ class LineChart extends Component
         ?string $xAxisTitle = null,
         ?string $yAxisTitle = null,
         bool $border = true,
-        ?string $borderColor = null
+        ?string $borderColor = null,
+        string $legendPosition = 'bottom'
     ) {
         $this->data = $data;
         $this->max = $max;
@@ -53,6 +55,7 @@ class LineChart extends Component
         $this->dataLabels = $dataLabels;
         $this->xAxisTitle = $xAxisTitle;
         $this->yAxisTitle = $yAxisTitle;
+        $this->legendPosition = $legendPosition;
         
         $this->initializeChartStyling($title, $border, $borderColor, $backgroundColor, $chartColor);
     }
