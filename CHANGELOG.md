@@ -3,6 +3,11 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.1] - 2026-01-04
+
+### Fixed
+- Fixed Donut Chart hover alignment issue where labels would not move with the slice on hover
+
 ## [1.1.0] - 2026-01-04
 
 ### Added

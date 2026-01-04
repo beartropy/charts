@@ -26,7 +26,7 @@
                             d="{{ $slice['path'] }}" 
                             fill="{{ $slice['color_is_css'] ? $slice['color'] : 'currentColor' }}"
                             class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] . ' hover:opacity-80' : (!$slice['color_is_css'] ? 'text-' . $slice['color'] . '-500 hover:text-' . $slice['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
-                            stroke-width="0.1"
+                            stroke-width="0"
                         >
                             <title>{{ $slice['label'] }}: {{ $slice['formatted_value'] }} ({{ $slice['percent'] }}%)</title>
                         </path>
