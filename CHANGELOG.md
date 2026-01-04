@@ -2,6 +2,24 @@
 
 All notable changes to `beartropy/charts` will be documented in this file.
 
+
+## [1.1.0] - 2026-01-04
+
+### Added
+- Added Polar Chart component with radial/polar visualization and cone-shaped segments
+- Added Radar Chart component with spider/web visualization for multi-variable data comparison
+- Added Donut Chart component with hollow center and optional center text/subtext display
+- Added `showValues` prop to Radar Chart to display numeric values at data points
+- Added `showLegend` prop to Radar Chart for explicit legend control (default: true)
+- Enhanced Radar Chart legend to show detailed axis values for each dataset
+
+### Changed
+- Improved Polar Chart default height from h-80 to h-96 for better visibility
+- Improved Donut Chart default height from h-80 to h-96 for better visibility
+- Changed hover effect on Pie Chart percentage labels from font-size increase to bold weight
+- Changed hover effect on Donut Chart percentage labels from font-size increase to bold weight
+- Reduced stroke width on Polar Chart segments from 0.3 to 0.1 for cleaner appearance
+
 ## [1.0.3] - 2026-01-03
 
 ### Added

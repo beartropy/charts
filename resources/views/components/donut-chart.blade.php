@@ -15,18 +15,18 @@
              <svg class="h-full w-auto" viewBox="0 0 100 100">
                 <!-- Shadow filter definition -->
                 <defs>
-                    <filter id="pie-slice-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <filter id="donut-slice-shadow" x="-50%" y="-50%" width="200%" height="200%">
                         <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
                     </filter>
                 </defs>
                 
                 @foreach($slices as $slice)
-                    <g class="pie-slice-group">
+                    <g class="donut-slice-group">
                         <path 
                             d="{{ $slice['path'] }}" 
                             fill="{{ $slice['color_is_css'] ? $slice['color'] : 'currentColor' }}"
-                            class="pie-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] . ' hover:opacity-80' : (!$slice['color_is_css'] ? 'text-' . $slice['color'] . '-500 hover:text-' . $slice['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
-                            stroke-width="0.1"
+                            class="donut-slice {{ $slice['color_is_tailwind_class'] ? $slice['color'] . ' hover:opacity-80' : (!$slice['color_is_css'] ? 'text-' . $slice['color'] . '-500 hover:text-' . $slice['color'] . '-400' : 'hover:opacity-80') }} transition-all duration-200 cursor-pointer stroke-white dark:stroke-gray-800 hover:scale-105 origin-center"
+                            stroke-width="0"
                         >
                             <title>{{ $slice['label'] }}: {{ $slice['formatted_value'] }} ({{ $slice['percent'] }}%)</title>
                         </path>
@@ -37,7 +37,7 @@
                                 y="{{ $slice['label_y'] }}" 
                                 text-anchor="middle" 
                                 dominant-baseline="middle" 
-                                class="pie-label fill-{{ $labelColor }} text-[5px] pointer-events-none select-none transition-all duration-200"
+                                class="donut-label fill-{{ $labelColor }} text-[4px] pointer-events-none select-none transition-all duration-200"
                                 style="text-shadow: 0px 0px 2px rgba(0,0,0,0.5);"
                             >
                                 {{ $slice['percent'] }}%
@@ -45,6 +45,31 @@
                         @endif
                     </g>
                 @endforeach
+                
+                <!-- Center text -->
+                @if($centerText)
+                    <text 
+                        x="50" 
+                        y="{{ $centerSubtext ? '47' : '50' }}" 
+                        text-anchor="middle" 
+                        dominant-baseline="middle" 
+                        class="fill-gray-700 dark:fill-gray-200 text-[8px] font-bold pointer-events-none select-none"
+                    >
+                        {{ $centerText }}
+                    </text>
+                @endif
+                
+                @if($centerSubtext)
+                    <text 
+                        x="50" 
+                        y="54" 
+                        text-anchor="middle" 
+                        dominant-baseline="middle" 
+                        class="fill-gray-500 dark:fill-gray-400 text-[3.5px] font-medium pointer-events-none select-none"
+                    >
+                        {{ $centerSubtext }}
+                    </text>
+                @endif
              </svg>
         </div>
 
@@ -74,13 +99,13 @@
     </div>
     
     <style>
-        .pie-slice {
+        .donut-slice {
             filter: none;
         }
-        .pie-slice:hover {
-            filter: url(#pie-slice-shadow);
+        .donut-slice:hover {
+            filter: url(#donut-slice-shadow);
         }
-        .pie-slice-group:hover .pie-label {
+        .donut-slice-group:hover .donut-label {
             font-weight: 700;
         }
     </style>
