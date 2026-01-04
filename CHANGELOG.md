@@ -3,6 +3,12 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.7] - 2026-01-04
+
+### Changed
+- Improved Radar Chart legend layout for `left` and `right` positions to display items in columns rather than a vertical list, matching the `bottom` layout behavior
+- Added `flex-row-reverse` support for `left` legend position to correctly align the legend to the left of the chart
+
 ## [1.1.6] - 2026-01-04
 
 ### Changed
