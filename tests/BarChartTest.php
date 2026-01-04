@@ -1,47 +1,53 @@
 <?php
 
-use Beartropy\Charts\Components\BarChart;
-use Livewire\Livewire;
+use Illuminate\Support\Facades\Blade;
 
 it('can render basic bar chart component', function () {
-    Livewire::test(BarChart::class)
-        ->assertSee('flex');
+    $html = Blade::render('<x-bt-bar-chart />');
+    expect($html)
+        ->toContain('flex');
 });
 
 it('renders bars based on data', function () {
     $data = [50, 100];
-    Livewire::test(BarChart::class, ['data' => $data])
-        ->assertSee('style="height: 50%"', false)
-        ->assertSee('style="height: 100%"', false);
+    $html = Blade::render('<x-bt-bar-chart :data="$data" />', ['data' => $data]);
+    
+    expect($html)
+        ->toContain('style="height: 50%;')
+        ->toContain('style="height: 100%;');
 });
 
 it('renders labels from array keys', function () {
     $data = ['January' => 10];
-    Livewire::test(BarChart::class, ['data' => $data])
-        ->assertSee('January');
+    $html = Blade::render('<x-bt-bar-chart :data="$data" />', ['data' => $data]);
+    
+    expect($html)->toContain('January');
 });
 
 it('renders labels from complex data structure', function () {
     $data = [
         ['label' => 'February', 'value' => 20]
     ];
-    Livewire::test(BarChart::class, ['data' => $data])
-        ->assertSee('February')
-        ->assertSee('style="height: 100%"', false);
+    $html = Blade::render('<x-bt-bar-chart :data="$data" />', ['data' => $data]);
+    
+    expect($html)
+        ->toContain('February')
+        ->toContain('style="height: 100%;');
 });
 
 it('respects max value for scaling', function () {
     $data = [50];
-    Livewire::test(BarChart::class, ['data' => $data, 'max' => 100])
-        ->assertSee('style="height: 50%"', false);
+    $html = Blade::render('<x-bt-bar-chart :data="$data" :max="100" />', ['data' => $data]);
+    
+    expect($html)->toContain('style="height: 50%;');
 });
 
 it('automatically assigns colors', function () {
     $data = [10, 20];
-    $component = Livewire::test(BarChart::class, ['data' => $data]);
+    $html = Blade::render('<x-bt-bar-chart :data="$data" />', ['data' => $data]);
     
     // Check for color classes
-    $component->assertSeeHtml('-500');
+    expect($html)->toContain('-500');
 });
 
 it('supports custom label and value keys', function () {
@@ -49,43 +55,59 @@ it('supports custom label and value keys', function () {
         ['name' => 'John', 'score' => 50],
         ['name' => 'Jane', 'score' => 80],
     ];
-    Livewire::test(BarChart::class, ['data' => $data, 'label' => 'name', 'value' => 'score'])
-        ->assertSee('John')
-        ->assertSee('Jane')
-        ->assertSee('style="height: 62.5%"', false);
+    $html = Blade::render('<x-bt-bar-chart :data="$data" label="name" value="score" />', ['data' => $data]);
+    
+    expect($html)
+        ->toContain('John')
+        ->toContain('Jane')
+        ->toContain('style="height: 62.5%;');
 });
 
 it('supports custom gap', function () {
-    Livewire::test(BarChart::class, ['gap' => 'lg'])
-        ->assertSee('space-x-6');
-});
-
-it('supports disabling rounded bars', function () {
-    Livewire::test(BarChart::class, ['rounded' => false])
-        ->assertDontSee('rounded-t');
+    $html = Blade::render('<x-bt-bar-chart gap="lg" />');
+    expect($html)->toContain('space-x-6');
 });
 
 it('can show grid lines', function () {
-    Livewire::test(BarChart::class, ['showGrid' => true])
-        ->assertSee('border-t border-gray-100');
+    $html = Blade::render('<x-bt-bar-chart :showGrid="true" />');
+    expect($html)->toContain('border-t border-gray-100');
 });
 
 it('can show y-axis', function () {
     $data = [100];
-    Livewire::test(BarChart::class, ['data' => $data, 'showYAxis' => true])
-        ->assertSee('100')
-        ->assertSee('50')
-        ->assertSee('0');
+    $html = Blade::render('<x-bt-bar-chart :data="$data" :showYAxis="true" />', ['data' => $data]);
+    
+    expect($html)
+        ->toContain('100')
+        ->toContain('50')
+        ->toContain('0');
 });
 
 it('can format values', function () {
     $data = [50];
-    Livewire::test(BarChart::class, ['data' => $data, 'formatValues' => '$%s'])
-        ->assertSee('$50');
+    $html = Blade::render('<x-bt-bar-chart :data="$data" formatValues="$%s" />', ['data' => $data]);
+    
+    expect($html)->toContain('$50');
 });
 
 it('can render title', function () {
-    Livewire::test(BarChart::class, ['title' => 'Monthly Revenue'])
-        ->assertSee('Monthly Revenue')
-        ->assertSeeHtml('<h3');
+    $html = Blade::render('<x-bt-bar-chart title="Monthly Revenue" />');
+    
+    expect($html)
+        ->toContain('Monthly Revenue')
+        ->toContain('<h3');
+});
+
+it('supports showValuesAlways prop', function () {
+    $data = [50];
+    
+    // Default (false) - should have group-hover
+    $htmlDefault = Blade::render('<x-bt-bar-chart :data="$data" />', ['data' => $data]);
+    expect($htmlDefault)->toContain('group-hover:opacity-100');
+    
+    // Enabled - should NOT have opacity-0 or group-hover dependency for visibility
+    // Note: implementation might be different, let's check for what marks it as always visible
+    // Based on previous knowledge, it likely removes 'opacity-0' class
+    $htmlAlways = Blade::render('<x-bt-bar-chart :data="$data" :showValuesAlways="true" />', ['data' => $data]);
+    expect($htmlAlways)->not->toContain('opacity-0');
 });

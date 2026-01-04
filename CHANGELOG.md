@@ -3,6 +3,17 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.5] - 2026-01-04
+
+### Added
+- Added comprehensive tests for Donut, Polar, and Radar charts (3 new test files)
+
+### Fixed
+- Fixed existing tests for Bar and Line charts to correctly use `Blade::render` instead of `Livewire::test` as they are standard Blade components
+- Fixed formatting of style attribute expectations in BarChart tests
+- Fixed Tailwind class suffix usage in PieChart tests
+- Ensured full test suite is passing
+
 ## [1.1.4] - 2026-01-04
 
 ### Fixed

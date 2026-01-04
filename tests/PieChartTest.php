@@ -85,3 +85,13 @@ it('can hide percentages on slices', function () {
     $htmlWithout = Blade::render('<x-bt-pie-chart :data="$data" :showLabels="false" />', ['data' => $data]);
     expect($htmlWithout)->not->toContain('<text');
 });
+
+it('supports custom label color', function () {
+    $data = [['label' => 'A', 'value' => 100]];
+    // Default is usually white
+    
+
+    // Custom color
+    $html = Blade::render('<x-bt-pie-chart :data="$data" labelColor="black" />', ['data' => $data]);
+    expect($html)->toContain('fill-black');
+});
