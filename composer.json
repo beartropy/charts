@@ -1,7 +1,7 @@
 {
     "name": "beartropy/charts",
     "description": "Chart components for the Beartropy ecosystem.",
-    "version": "1.1.8",
+    "version": "1.1.9",
     "license": "MIT",
     "autoload": {
         "psr-4": {

@@ -11,7 +11,7 @@ class LineChart extends Component
 
     public array $data = [];
     public ?float $max = null;
-    public string $height = 'h-64';
+    public string $height = 'h-48 md:h-64';
     public bool $showGrid = true;
     public bool $showYAxis = true;
     public string $formatValues = '%s';
@@ -26,7 +26,7 @@ class LineChart extends Component
     public function __construct(
         array $data = [],
         ?float $max = null,
-        string $height = 'h-64',
+        string $height = 'h-48 md:h-64',
         mixed $chartColor = null,
         ?string $backgroundColor = null,
         ?string $title = null,

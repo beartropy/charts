@@ -10,7 +10,7 @@ class RadarChart extends Component
     use HasChartStyling;
 
     public array $data = [];
-    public string $height = 'h-96';
+    public string $height = 'h-48 md:h-96';
     public bool $showLabels = true;
     public bool $showValues = false;
     public string $legendPosition = 'bottom';
@@ -26,7 +26,7 @@ class RadarChart extends Component
 
     public function __construct(
         array $data = [],
-        string $height = 'h-96',
+        string $height = 'h-48 md:h-96',
         mixed $chartColor = null,
         ?string $backgroundColor = null,
         ?string $title = null,

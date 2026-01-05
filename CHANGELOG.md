@@ -3,6 +3,18 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.9] - 2026-01-05
+
+### Added
+- Added mobile responsive support to all chart components
+- Charts now use `flex-col` layout on mobile with legends always positioned below the chart
+- Desktop (`md:`) breakpoint restores side legend layouts when configured
+
+### Changed
+- Updated default heights to be responsive with mobile-first approach:
+  - Pie, Line, Bar charts: `h-48 md:h-64` (192px on mobile, 256px on desktop)
+  - Donut, Radar, Polar charts: `h-48 md:h-96` (192px on mobile, 384px on desktop)
+
 ## [1.1.8] - 2026-01-04
 
 ### Added

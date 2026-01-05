@@ -6,9 +6,8 @@
     {{ $attributes }}
 >
     <div @class([
-        'flex items-center w-full gap-6',
-        'flex-col' => $legendPosition === 'bottom',
-        'flex-row' => $legendPosition === 'right',
+        'flex items-center w-full gap-6 flex-col',
+        'md:flex-row' => $legendPosition === 'right',
     ])>
         <!-- Chart Area -->
         <div class="relative {{ $height }} w-auto flex-shrink-0 flex justify-center items-center">
@@ -52,8 +51,8 @@
         @if($legendPosition !== 'none' && $legendPosition !== 'hidden')
             <div @class([
                 'flex gap-4 text-xs overflow-y-auto max-h-64 pr-2',
-                'flex-col w-64' => $legendPosition === 'right',
-                'flex-row flex-wrap justify-center w-full' => $legendPosition === 'bottom',
+                'flex-row flex-wrap justify-center w-full' => true,
+                'md:flex-col md:w-64 md:justify-start' => $legendPosition === 'right',
             ])>
                 @foreach($slices as $slice)
                     <div class="flex items-center gap-2 group cursor-default">

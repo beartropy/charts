@@ -10,7 +10,7 @@ class PieChart extends Component
     use HasChartStyling;
 
     public array $data = [];
-    public string $height = 'h-64';
+    public string $height = 'h-48 md:h-64';
     public bool $showLabels = true;
     public string $legendPosition = 'right';
     public string $formatValues = '%s';
@@ -20,7 +20,7 @@ class PieChart extends Component
 
     public function __construct(
         array $data = [],
-        string $height = 'h-64',
+        string $height = 'h-48 md:h-64',
         mixed $chartColor = null,
         ?string $backgroundColor = null,
         ?string $title = null,

@@ -11,7 +11,7 @@ class BarChart extends Component
 
     public array $data = [];
     public ?float $max = null;
-    public string $height = 'h-64';
+    public string $height = 'h-48 md:h-64';
     public bool $showValues = true;
     public bool $showValuesAlways = false;
     public string $color = 'beartropy';
@@ -26,7 +26,7 @@ class BarChart extends Component
     public function __construct(
         array $data = [],
         ?float $max = null,
-        string $height = 'h-64',
+        string $height = 'h-48 md:h-64',
         bool $showValues = true,
         bool $showValuesAlways = false,
         string $color = 'beartropy',

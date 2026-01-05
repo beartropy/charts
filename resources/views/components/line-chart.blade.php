@@ -6,9 +6,8 @@
     {{ $attributes }}
 >
     <div @class([
-        'flex w-full gap-4',
-        'flex-col' => $legendPosition === 'bottom',
-        'flex-row' => $legendPosition === 'right',
+        'flex w-full gap-4 flex-col',
+        'md:flex-row' => $legendPosition === 'right',
     ])>
         <div class="flex w-full flex-1">
             <!-- Y-Axis -->
@@ -114,8 +113,8 @@
         @if($legendPosition !== 'none' && $legendPosition !== 'hidden')
             <div @class([
                 'flex gap-4 text-xs overflow-y-auto max-h-64 pr-2',
-                'flex-col w-64' => $legendPosition === 'right',
-                'flex-row flex-wrap justify-center w-full' => $legendPosition === 'bottom',
+                'flex-row flex-wrap justify-center w-full' => true,
+                'md:flex-col md:w-64 md:justify-start' => $legendPosition === 'right',
             ])>
                 @foreach($datasets as $dataset)
                     <div class="flex items-center gap-2 group cursor-default">

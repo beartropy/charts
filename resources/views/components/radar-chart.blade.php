@@ -8,10 +8,9 @@
     <div 
         x-data="{ hoveredDataset: null }"
         @class([
-            'flex items-center w-full gap-6',
-            'flex-col' => $legendPosition === 'bottom',
-            'flex-row' => $legendPosition === 'right',
-            'flex-row-reverse' => $legendPosition === 'left',
+            'flex items-center w-full gap-6 flex-col',
+            'md:flex-row' => $legendPosition === 'right',
+            'md:flex-row-reverse' => $legendPosition === 'left',
         ])
     >
         <!-- Chart Area -->
@@ -145,8 +144,8 @@
         @if($showLegend && $legendPosition !== 'none' && $legendPosition !== 'hidden')
             <div @class([
                 'flex gap-4 text-xs overflow-y-auto max-h-64 pr-2',
-                'flex-row flex-wrap' => $legendPosition === 'right' || $legendPosition === 'left',
-                'flex-row flex-wrap justify-center w-full gap-6' => $legendPosition === 'bottom',
+                'flex-row flex-wrap justify-center w-full gap-6' => true,
+                'md:justify-start md:gap-4' => $legendPosition === 'right' || $legendPosition === 'left',
             ])>
                 @foreach($datasets as $dataset)
                     <div class="flex flex-col gap-2">
