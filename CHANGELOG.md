@@ -3,6 +3,11 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.10] - 2026-04-07
+
+### Changed
+- Added Laravel 13 support (`illuminate/support: ^13.0`, `illuminate/view: ^13.0`)
+
 ## [1.1.9] - 2026-01-05
 
 ### Added
