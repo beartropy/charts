@@ -3,6 +3,12 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.11] - 2026-04-10
+
+### Added
+- **Docs**: AI assistant documentation (`docs/components/`, `docs/llms/`, `docs/ai-assistants/`) with props, usage examples, AI reference, cursor rules, and code examples for all chart components.
+- **Skills**: Claude Code skills (`bt-charts-setup`, `bt-charts-component`) and `skills.json` manifest for the `beartropy:skills` installer command.
+
 ## [1.1.10] - 2026-04-07
 
 ### Changed

@@ -1,0 +1,5 @@
+{
+    "prefix": "bt-charts",
+    "excludeSkills": [],
+    "componentDocs": "docs/llms"
+}

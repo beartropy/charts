@@ -1,0 +1,47 @@
+# Beartropy Charts - Cursor Rules
+
+## Project Context
+This project uses **Beartropy Charts**, SVG-based chart components for the TALL stack (Tailwind, Alpine, Laravel, Livewire).
+
+## Chart Components
+
+### Available Tags
+```blade
+<x-bt-bar-chart :data="$data" />
+<x-bt-line-chart :data="$data" />
+<x-bt-pie-chart :data="$data" />
+<x-bt-donut-chart :data="$data" />
+<x-bt-radar-chart :data="$data" />
+<x-bt-polar-chart :data="$data" />
+<x-bt-chart-wrapper title="Title">...</x-bt-chart-wrapper>
+```
+
+### Data Formats
+```php
+# Simple (bar, pie, donut, polar)
+['Jan' => 100, 'Feb' => 200]
+
+# With colors
+[['label' => 'A', 'value' => 100, 'color' => '#3B82F6']]
+
+# Multi-dataset (line, radar)
+[['label' => 'Series', 'data' => ['Jan' => 500], 'color' => '#hex']]
+
+# Radar axes
+[['label' => 'Product', 'Speed' => 80, 'Power' => 90]]
+```
+
+### Common Props
+- `:data` (array) — Chart data
+- `height` (string) — Tailwind height classes, default "h-48 md:h-64"
+- `title` (string) — Chart title
+- `:border` (bool) — Show border, default true
+- `formatValues` (string) — printf format, e.g. "$%s"
+- `chartColor` (string) — Color palette override
+- `legendPosition` (string) — "right", "bottom", "none", "hidden"
+
+### Best Practices
+- Always pass data as bound prop: `:data="$data"` not `data="..."`
+- Use `formatValues` for currency/percentage: `formatValues="$%s"` or `formatValues="%s%%"`
+- Wrap with `<x-bt-chart-wrapper>` and set `:border="false"` on inner chart to avoid double borders
+- Charts are Livewire-compatible — use computed properties for reactive data
