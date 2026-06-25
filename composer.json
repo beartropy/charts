@@ -1,7 +1,7 @@
 {
     "name": "beartropy/charts",
     "description": "Chart components for the Beartropy ecosystem.",
-    "version": "1.1.11",
+    "version": "1.1.12",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -16,10 +16,10 @@
     "require": {
         "illuminate/support": "^11.0|^12.0|^13.0",
         "illuminate/view": "^11.0|^12.0|^13.0",
-        "livewire/livewire": "^3.0"
+        "livewire/livewire": "^3.0|^4.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0"
     },

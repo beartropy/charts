@@ -3,6 +3,12 @@
 All notable changes to `beartropy/charts` will be documented in this file.
 
 
+## [1.1.12] - 2026-06-25
+
+### Changed
+- **Dependencies**: Allow Livewire 4 (`livewire/livewire: ^3.0|^4.0`).
+- **Dev**: Test against Laravel 13 via Orchestra Testbench 11 (`orchestra/testbench: ^9.0|^10.0|^11.0`).
+
 ## [1.1.11] - 2026-04-10
 
 ### Added
